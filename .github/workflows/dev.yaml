@@ -35,6 +35,7 @@ jobs:
 
       - name: package helm chart
         run: | 
+          helm show chart .
           CHART_NAME=$(helm show chart . | ./yq .name)
           CHART_VERSION=$(helm show chart . | ./yq .version)
           echo "CHART_NAME=$CHART_NAME" >> $GITHUB_ENV
