@@ -29,20 +29,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-                  - name: install helm
-                    uses: azure/setup-helm@v3
-                    with:
-                      token: ${{ secrets.GITHUB_TOKEN }}
-            
-                  - name: package helm chart
-                    run: | 
-                      helm registry login ${{ secrets.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }}
-                      helm package --dependency-update .
+      - name: install helm
+        uses: azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-                  - name: package helm chart
-                    run: | 
-                      CHART_NAME=$(helm show chart . | ./yq .name)
-                      CHART_VERSION=$(helm show chart . | ./yq .version)
-                      echo "CHART_NAME=$CHART_NAME" >> $GITHUB_ENV
-                      echo "CHART_VERSION=$CHART_VERSION" >> $GITHUB_ENV
-                      helm push ./${{ env.CHART_NAME }}-${{ env.CHART_VERSION }}.tgz ${{ secrets.REGISTRY_URL }}
+      - name: package helm chart
+        run: | 
+          helm registry login ${{ secrets.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }}
+          helm package --dependency-update .
+
+      - name: package helm chart
+        run: | 
+          CHART_NAME=$(helm show chart . | ./yq .name)
+          CHART_VERSION=$(helm show chart . | ./yq .version)
+          echo "CHART_NAME=$CHART_NAME" >> $GITHUB_ENV
+          echo "CHART_VERSION=$CHART_VERSION" >> $GITHUB_ENV
+          helm push ./${{ env.CHART_NAME }}-${{ env.CHART_VERSION }}.tgz ${{ secrets.REGISTRY_URL }}
