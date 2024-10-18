@@ -36,8 +36,6 @@ jobs:
       - name: package helm chart
         run: | 
           helm show chart .
-          CHART_NAME=$(helm show chart . | ./yq .name)
-          CHART_VERSION=$(helm show chart . | ./yq .version)
-          echo "CHART_NAME=$CHART_NAME" >> $GITHUB_ENV
-          echo "CHART_VERSION=$CHART_VERSION" >> $GITHUB_ENV
-          helm push ./${{ env.CHART_NAME }}-${{ env.CHART_VERSION }}.tgz oci://${{ secrets.REGISTRY_URL }}
+          CHART_NAME=$(helm show chart . | ./yq -r .name)
+          CHART_VERSION=$(helm show chart . | ./yq -r .version)
+          helm push ./$CHART_NAME-$CHART_VERSION.tgz oci://${{ secrets.REGISTRY_URL }}
