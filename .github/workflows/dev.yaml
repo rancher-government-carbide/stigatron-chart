@@ -38,4 +38,4 @@ jobs:
           helm show chart .
           CHART_NAME=$(helm show chart . | ./yq -r .name)
           CHART_VERSION=$(helm show chart . | ./yq -r .version)
-          helm push ./$CHART_NAME-$CHART_VERSION.tgz oci://${{ secrets.REGISTRY_URL }}
+          helm push ./$CHART_NAME-$CHART_VERSION.tgz oci://${{ secrets.REGISTRY_URL }}/charts
